@@ -1,121 +1,114 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useEffect, useState } from "react";
+import logo from "./assets/logo.png";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/api/users")
+      .then(res => res.json())
+      .then(data => setUsers(Array.isArray(data) ? data : []))
+      .catch(err => console.error(err));
+  }, []);
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div style={{ display: "flex", height: "100vh", fontFamily: "Inter, sans-serif" }}>
 
-      <div className="ticks"></div>
+      {/* SIDEBAR */}
+      <div style={{
+        width: "250px",
+        backgroundColor: "#0f172a",
+        color: "white",
+        padding: "20px"
+      }}>
+        <h2 style={{ marginBottom: "30px" }}>SAPD</h2>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+        <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+          <span style={{ cursor: "pointer" }}>Dashboard</span>
+          <span style={{ cursor: "pointer" }}>Policías</span>
+          <span style={{ cursor: "pointer" }}>Divisiones</span>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      </div>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      {/* MAIN */}
+      <div style={{ flex: 1, backgroundColor: "#f1f5f9" }}>
+
+        {/* NAVBAR */}
+        <div style={{
+          backgroundColor: "white",
+          padding: "15px 30px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          borderBottom: "1px solid #e5e7eb"
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <img src={logo} alt="SAPD" style={{ width: "40px" }} />
+            <span style={{ fontWeight: "500" }}>San Andreas Police Department</span>
+          </div>
+
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            cursor: "pointer"
+          }}>
+            {/* Avatar */}
+            <div style={{
+              width: "35px",
+              height: "35px",
+              borderRadius: "50%",
+              backgroundColor: "#1e293b",
+              color: "white",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "14px",
+              fontWeight: "500"
+            }}>
+              AM
+            </div>
+
+            {/* Nombre */}
+            <span style={{ fontWeight: "500" }}>
+              Alberto Martinez
+            </span>
+
+            {/* Flecha */}
+            <span style={{ fontSize: "12px" }}>
+              ▼
+            </span>
+          </div>
+        </div>
+
+        {/* CONTENIDO */}
+        <div style={{ padding: "30px" }}>
+          <h2 style={{ marginBottom: "20px" }}>Policías</h2>
+
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+            gap: "20px"
+          }}>
+            {users.map(user => (
+              <div key={user._id} style={{
+                backgroundColor: "white",
+                padding: "20px",
+                border: "1px solid #e5e7eb",
+                boxShadow: "none"
+              }}>
+                <h3>{user.name}</h3>
+                <p>Placa: {user.placa}</p>
+                <p>Rango: {user.rank}</p>
+                <p>{user.jurisdiccion}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;
