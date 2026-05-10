@@ -7,7 +7,8 @@ const divisionSchema = new mongoose.Schema(
       required: true,
       unique: true,
       trim: true,
-      // Ejemplos: 'ASD', 'SWAT', 'K9', 'Tráfico', 'Detectives'
+      // Divisiones troncales: 'Detective Bureau', 'Metropolitan Division'
+      // Divisiones adicionales: 'RTD', 'ASD', 'SAHP', 'PPD', 'SASPA', 'PD', 'RRPP', 'K9 Unit'
     },
     acronym: {
       type: String,
@@ -20,6 +21,13 @@ const divisionSchema = new mongoose.Schema(
     description: {
       type: String,
       default: '',
+    },
+    // Las divisiones troncales (DB y METRO) son mutuamente excluyentes:
+    // un agente solo puede pertenecer a una de ellas.
+    // Las divisiones no troncales se pueden combinar libremente.
+    troncal: {
+      type: Boolean,
+      default: false,
     },
     active: {
       type: Boolean,
